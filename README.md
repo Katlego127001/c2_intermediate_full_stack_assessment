@@ -1,4 +1,4 @@
-# c2_intermediate_full_stack_assessment# Full Stack Intermediate Assessment
+# Full Stack Intermediate Assessment
 
 ## Project: Internal Job Tracking System
 
