@@ -122,7 +122,6 @@ Wait ~30 seconds for healthchecks, then open:
 |---|---|
 | http://localhost          | Web app (Next.js via Nginx) |
 | http://localhost/docs     | Swagger UI |
-| http://localhost/redoc    | ReDoc |
 | http://localhost/health   | Backend health probe |
 
 **Default seeded credentials** (created by `python -m app.utils.seed` on first boot):
@@ -227,7 +226,6 @@ App is at http://localhost:3000; ensure `NEXT_PUBLIC_API_URL` points to your bac
 
 Auto-generated OpenAPI + Swagger UI:
 - Swagger UI: `/docs`
-- ReDoc: `/redoc`
 - JSON spec: `/openapi.json`
 
 ### Quick reference
