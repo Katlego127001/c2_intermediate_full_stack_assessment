@@ -68,6 +68,11 @@ services:
       backend: { condition: service_started }
     command: ["celery", "-A", "app.tasks.celery_app.celery_app", "worker", "--loglevel=info"]
     networks: [jobnet]
+    healthcheck:
+      test: ["CMD", "celery", "-A", "app.tasks.celery_app.celery_app", "inspect", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   celery_beat:
     build:
@@ -80,6 +85,8 @@ services:
       backend: { condition: service_started }
     command: ["celery", "-A", "app.tasks.celery_app.celery_app", "beat", "--loglevel=info"]
     networks: [jobnet]
+    healthcheck:
+      disable: true
 
   frontend:
     build:
@@ -93,6 +100,9 @@ services:
       backend: { condition: service_started }
     expose: ["3000"]
     networks: [jobnet]
+    healthcheck:
+      disable: true
+
 
   nginx:
     image: nginx:1.27-alpine
