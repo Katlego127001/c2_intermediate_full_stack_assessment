@@ -1,6 +1,7 @@
 # Production-ready docker-compose for JobTracker
 # Services: db, redis, backend, celery_worker, celery_beat, frontend, nginx
 # Internal network "jobnet"; nginx exposes :80 to host.
+
 name: jobtracker
 
 services:
@@ -8,13 +9,13 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-jobtracker}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-jobtracker_pw}
-      POSTGRES_DB: ${POSTGRES_DB:-jobtracker}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres_tracking_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-JobTracking3213}
+      POSTGRES_DB: ${POSTGRES_DB:-job_tracking_db}
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-jobtracker} -d ${POSTGRES_DB:-jobtracker}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres_tracking_user} -d ${POSTGRES_DB:-job_tracking_db}"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -54,7 +55,7 @@ services:
       start_period: 30s
       retries: 5
     networks: [jobnet]
-    
+
 
   celery_worker:
     build:

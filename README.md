@@ -90,7 +90,7 @@ routes (HTTP)  →  services (business logic)  →  repositories (data access)  
 Requirements: Docker 24+, Docker Compose v2.
 
 ```bash
-git clone <this-repo> && cd job-tracker
+git clone <this-repo> && cd c2_intermediate_full_stack_assessment
 
 cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env.local
@@ -125,7 +125,7 @@ Useful commands:
 docker compose logs -f backend
 docker compose exec backend alembic upgrade head      # explicit migration
 docker compose exec backend python -m app.utils.seed  # re-run seed (idempotent)
-docker compose exec db psql -U jobtracker -d jobtracker
+docker compose exec db psql -U postgres_tracking_user -d job_tracking_db
 docker compose down -v                                 # tear down + wipe volumes
 ```
 
