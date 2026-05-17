@@ -99,6 +99,23 @@ cp .env.example .env      # for compose-level vars (optional)
 docker compose up -d --build
 ```
 
+Troubleshooting
+If you encounter an error like:
+
+sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) 
+connection to server at "db" (192.168.208.2), port 5432 failed: 
+FATAL:  password authentication failed for user "postgres_tracking_user"
+This usually means the database container has stale volumes with old credentials.
+To fix it, remove the containers and volumes, then rebuild:
+
+```bash
+docker compose down -v
+docker compose up -d --build
+docker compose down -v → stops all containers and deletes associated volumes (removes old DB state).
+
+docker compose up -d --build → rebuilds images and starts fresh containers with the correct environment variables.
+```
+
 Wait ~30 seconds for healthchecks, then open:
 
 | URL | Purpose |
