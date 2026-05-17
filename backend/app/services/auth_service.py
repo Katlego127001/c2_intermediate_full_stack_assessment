@@ -81,7 +81,15 @@ class AuthService:
 
     async def authenticate(self, email: str, password: str) -> tuple[User, TokenPair]:
         user = await self.users.get_by_email(email)
-        if not user or not verify_password(password, user.password_hash):
+        # Distinguish between unknown user and bad password so callers can
+        # provide a clearer error message. Keep the wrong-password case as
+        # 401 Unauthorized but return a clear message when the user doesn't
+        # exist.
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="User does not exist"
+            )
+        if not verify_password(password, user.password_hash):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
             )
