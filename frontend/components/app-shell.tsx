@@ -94,16 +94,20 @@ export function AppShell({ children, role }: { children: React.ReactNode; role: 
           <Link href={role === "admin" ? "/admin" : "/employee"} className="font-semibold tracking-tight">
             JobTracker
           </Link>
-          <span className="ml-2 hidden rounded-full bg-[hsl(var(--muted))] px-2 py-0.5 text-xs uppercase tracking-wider text-[hsl(var(--muted-foreground))] sm:inline">
+          <span
+            className="ml-2 hidden rounded-full bg-[hsl(var(--muted))] px-2 py-0.5 text-xs uppercase tracking-wider text-[hsl(var(--muted-foreground))] sm:inline"
+            title={`Role: ${role}`}
+            aria-label={`Role: ${role}`}
+          >
             {role}
           </span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="hidden text-sm text-[hsl(var(--muted-foreground))] sm:inline">
+          <span className="hidden text-sm text-[hsl(var(--muted-foreground))] sm:inline" title={user?.full_name || user?.email}>
             {user?.full_name || user?.email}
           </span>
           <ThemeToggle />
-          <Button variant="ghost" size="icon" aria-label="Logout" onClick={handleLogout}>
+          <Button variant="ghost" size="icon" aria-label="Logout" title="Logout" onClick={handleLogout}>
             <LogOut size={16} />
           </Button>
         </div>
@@ -124,6 +128,8 @@ export function AppShell({ children, role }: { children: React.ReactNode; role: 
                   key={item.href}
                   href={item.href}
                   onClick={() => setOpen(false)}
+                  title={item.label}
+                  aria-label={item.label}
                   className={cn(
                     "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors",
                     active
