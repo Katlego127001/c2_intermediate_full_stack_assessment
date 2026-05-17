@@ -155,18 +155,25 @@ docker compose down -v                                 # tear down + wipe volume
 cd backend
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env
-# Point DATABASE_URL at a local Postgres OR use sqlite for quick testing
+cp .env.local.example .env
 alembic upgrade head
 python -m app.utils.seed
+
+# --- Important ---
+# Start Redis in a separate terminal window before running uvicorn.
+# This keeps rate limiting and Celery working in local dev.
+docker run -p 6379:6379 redis:7-alpine
+
+# Back in your backend terminal, start the app:
 uvicorn app.main:app --reload
+
 ```
 
 ### Frontend
 ```bash
 cd frontend
 npm install
-cp .env.example .env.local
+cp .env.local.example .env.local
 npm run dev
 ```
 
