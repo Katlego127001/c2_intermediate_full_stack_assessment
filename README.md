@@ -150,7 +150,25 @@ docker compose down -v                                 # tear down + wipe volume
 
 ## Local development
 
-### Backend
+### 1. One‑time Postgres Database Setup
+Before running migrations, you need to create the database and user once:
+
+```bash
+# Connect to PostgreSQL as the default superuser
+psql -U postgres
+
+# In the psql prompt, run:
+CREATE DATABASE job_tracking_db;
+CREATE USER postgres_tracking_user WITH PASSWORD 'JobTracking3213';
+ALTER ROLE postgres_tracking_user CREATEDB;
+GRANT ALL PRIVILEGES ON DATABASE job_tracking_db TO postgres_tracking_user;
+\connect job_tracking_db
+GRANT ALL ON SCHEMA public TO postgres_tracking_user;
+\q
+
+```
+
+### 2. Backend
 ```bash
 cd backend
 python -m venv .venv && source .venv/bin/activate
@@ -169,7 +187,7 @@ uvicorn app.main:app --reload
 
 ```
 
-### Frontend
+### 3. Frontend
 ```bash
 cd frontend
 npm install
