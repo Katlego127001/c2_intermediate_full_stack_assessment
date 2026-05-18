@@ -157,13 +157,13 @@ Before running migrations, you need to create the database and user once:
 psql -U postgres
 
 # In the psql prompt, run:
-CREATE DATABASE job_tracking_db;
-CREATE USER postgres_tracking_user WITH PASSWORD 'JobTracking3213';
-ALTER ROLE postgres_tracking_user CREATEDB;
-GRANT ALL PRIVILEGES ON DATABASE job_tracking_db TO postgres_tracking_user;
-\connect job_tracking_db
-GRANT ALL ON SCHEMA public TO postgres_tracking_user;
-\q
+->> CREATE DATABASE job_tracking_db;
+->> CREATE USER postgres_tracking_user WITH PASSWORD 'JobTracking3213';
+->> ALTER ROLE postgres_tracking_user CREATEDB;
+->> GRANT ALL PRIVILEGES ON DATABASE job_tracking_db TO postgres_tracking_user;
+->> \connect job_tracking_db
+->> GRANT ALL ON SCHEMA public TO postgres_tracking_user;
+->> \q
 
 ```
 
