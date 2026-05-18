@@ -124,7 +124,11 @@ export default function AdminEmployeesPage() {
               </tr>
             </thead>
             <tbody>
-              {employees.data!.items.map((e) => (
+              {(
+                // Sort client-side by full_name to provide a stable, predictable
+                // ordering so status updates don't move rows unexpectedly.
+                employees.data!.items.slice().sort((a, b) => a.full_name.localeCompare(b.full_name))
+              ).map((e) => (
                 <tr key={e.id} className="border-t border-[hsl(var(--border))]">
                   <td className="px-3 py-2 font-medium">{e.full_name}</td>
                   <td className="px-3 py-2 text-[hsl(var(--muted-foreground))]">{e.email}</td>
@@ -139,11 +143,17 @@ export default function AdminEmployeesPage() {
                   </td>
                   <td className="px-3 py-2">
                     <div className="flex justify-end gap-1">
-                      <Button size="sm" variant="ghost"
-                        onClick={() => statusMut.mutate({ id: e.id, s: e.employment_status === "active" ? "inactive" : "active" })}
-                      >
-                        {e.employment_status === "active" ? "Deactivate" : "Activate"}
-                      </Button>
+                      {e.role === "admin" ? (
+                        <Button size="sm" variant="ghost" disabled title="Admin accounts cannot be deactivated">
+                          {e.employment_status === "active" ? "Deactivate" : "Activate"}
+                        </Button>
+                      ) : (
+                        <Button size="sm" variant="ghost"
+                          onClick={() => statusMut.mutate({ id: e.id, s: e.employment_status === "active" ? "inactive" : "active" })}
+                        >
+                          {e.employment_status === "active" ? "Deactivate" : "Activate"}
+                        </Button>
+                      )}
                       <Button size="icon" variant="ghost" aria-label="Edit"
                         onClick={() => { setEditing(e); setOpen(true); }}
                       >

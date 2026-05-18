@@ -63,7 +63,13 @@ class EmployeeService:
         if data.role is not None:
             emp.user.role = data.role
             changes["role"] = data.role.value
+        # Prevent deactivating admin accounts
         if data.employment_status is not None:
+            if emp.user.role == UserRole.ADMIN and data.employment_status != EmploymentStatus.ACTIVE:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Admin accounts cannot be deactivated",
+                )
             emp.user.is_active = data.employment_status == EmploymentStatus.ACTIVE
 
         await self.activity.log(
@@ -80,6 +86,11 @@ class EmployeeService:
         emp = await self.repo.get_with_user(employee_id)
         if not emp:
             raise HTTPException(status_code=404, detail="Employee not found")
+        # Do not allow admin accounts to be deactivated
+        if emp.user.role == UserRole.ADMIN and new_status != EmploymentStatus.ACTIVE:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Admin accounts cannot be deactivated"
+            )
         emp.employment_status = new_status
         emp.user.is_active = new_status == EmploymentStatus.ACTIVE
         await self.activity.log(
